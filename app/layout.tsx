@@ -3,6 +3,7 @@ import "./globals.css";
 import {BackgroundWave} from "@/components/background-wave";
 import Link from "next/link";
 import {ElevenLabsLogo, GithubLogo} from "@/components/logos";
+import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "ConvAI",
@@ -42,6 +43,11 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
             </nav>
             {children}
             <BackgroundWave/>
+            <elevenlabs-convai agent-id="hVEfTWDCmB4yzOtC2Hx5"></elevenlabs-convai>
+            <Script
+                src="https://elevenlabs.io/convai-widget/index.js"
+                strategy="afterInteractive"
+            />
         </div>
         </body>
         </html>
