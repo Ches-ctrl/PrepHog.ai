@@ -1,4 +1,5 @@
 import {ConvAI} from "@/components/ConvAI";
+import {BackgroundWave} from "@/components/background-wave";
 
 export default function VoicePage() {
     return (
@@ -7,6 +8,7 @@ export default function VoicePage() {
             <main className="flex flex-col gap-8 row-start-2 items-center">
                 <ConvAI/>
             </main>
+            <BackgroundWave/>
         </div>
     );
 }

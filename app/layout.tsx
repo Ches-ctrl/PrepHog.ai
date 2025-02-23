@@ -1,6 +1,5 @@
 import type {Metadata} from "next";
 import "./globals.css";
-import {BackgroundWave} from "@/components/background-wave";
 import Link from "next/link";
 import {ElevenLabsLogo, GithubLogo} from "@/components/logos";
 import Script from 'next/script';
@@ -29,7 +28,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
 
                 <div className={"flex gap-4 justify-end"}>
                     <Link
-                        href="https://github.com/jonatanvm/convai-demo"
+                        href="https://github.com/ches-ctrl"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={"py-0.5"}
@@ -42,7 +41,6 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                 </div>
             </nav>
             {children}
-            <BackgroundWave/>
             <elevenlabs-convai agent-id="hVEfTWDCmB4yzOtC2Hx5"></elevenlabs-convai>
             <Script
                 src="https://elevenlabs.io/convai-widget/index.js"
