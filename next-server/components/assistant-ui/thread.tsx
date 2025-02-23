@@ -22,7 +22,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { MarkdownText } from "@/components/assistant-ui/markdown-text";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
-
+import Image from "next/image";
 
 export const Thread: FC = () => {
   return (
@@ -79,7 +79,7 @@ const ThreadWelcome: FC = () => {
             <AvatarFallback>C</AvatarFallback>
           </Avatar>
           <p className="mt-4 font-medium">
-            How can I help you today?
+            Start your Posthog job interview practice
           </p>
         </div>
         <ThreadWelcomeSuggestions />
@@ -93,22 +93,24 @@ const ThreadWelcomeSuggestions: FC = () => {
     <div className="mt-3 flex w-full items-stretch justify-center gap-4">
       <ThreadPrimitive.Suggestion
         className="hover:bg-muted/80 flex max-w-sm grow basis-0 flex-col items-center justify-center rounded-lg border p-3 transition-colors ease-in"
-        prompt="What is the weather in Tokyo?"
+        prompt="You're a culture fit interviewer. Ask me about my experience working in a remote-first environment and how I stay productive and connected with my team."
         method="replace"
         autoSend
       >
-        <span className="line-clamp-2 text-ellipsis text-sm font-semibold">
-          What is the weather in Tokyo?
+        <span className="line-clamp-2 text-ellipsis text-sm font-semibold flex items-center gap-2">
+          <Image src="/hogbert-engineers.png" alt="Hogbert" width={20} height={20} />
+          Culture fit interview
         </span>
       </ThreadPrimitive.Suggestion>
       <ThreadPrimitive.Suggestion
         className="hover:bg-muted/80 flex max-w-sm grow basis-0 flex-col items-center justify-center rounded-lg border p-3 transition-colors ease-in"
-        prompt="What is assistant-ui?"
+        prompt="You're a technical interviewer. Ask me about my experience working in a remote-first environment and how I stay productive and connected with my team."
         method="replace"
         autoSend
       >
-        <span className="line-clamp-2 text-ellipsis text-sm font-semibold">
-          What is assistant-ui?
+        <span className="line-clamp-2 text-ellipsis text-sm font-semibold flex items-center gap-2">
+          <Image src="/hogbert-engineers.png" alt="Hogbert" width={20} height={20} />
+          Technical interview
         </span>
       </ThreadPrimitive.Suggestion>
     </div>
