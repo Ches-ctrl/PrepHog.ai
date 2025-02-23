@@ -136,3 +136,14 @@ body {
         transform: translate(0, 0) rotate(360deg);
     }
 }
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+}
