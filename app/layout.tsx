@@ -1,12 +1,12 @@
 import type {Metadata} from "next";
 import "./globals.css";
 import Link from "next/link";
-import {ElevenLabsLogo, GithubLogo} from "@/components/logos";
+import {GithubLogo} from "@/components/logos";
 import Script from 'next/script';
 import { PostHogSnippet } from "@/components/analytics/posthog-snippet";
 
 export const metadata: Metadata = {
-    title: "ConvAI",
+    title: "PrepHog",
 };
 
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
@@ -21,12 +21,12 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                     }
                 >
                     <div className={"flex"}>
-                      <h1 className="text-xl font-bold">PrepHog</h1>
+                      <Link href="/" className="text-xl font-bold">PrepHog</Link>
                     </div>
 
                     <div className={"flex gap-4 justify-end"}>
                         <Link
-                            href="https://github.com/ches-ctrl"
+                            href="https://github.com/ches-ctrl/prephog.ai"
                             target="_blank"
                             rel="noopener noreferrer"
                             className={"py-0.5"}
