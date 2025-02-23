@@ -39,7 +39,7 @@ ngrok http --url=<your-static-url> 8000
    - Set the webhook URL for incoming calls to: `{your-ngrok-url}/twilio/inbound_call`
    - Make sure the HTTP method is set to POST
 
-https://ab81-5-148-87-204.ngrok-free.app/twilio/inbound_call
+https://9bda-5-148-87-204.ngrok-free.app/twilio/inbound_call
 
 ## Testing
 
@@ -54,16 +54,16 @@ https://ab81-5-148-87-204.ngrok-free.app/twilio/inbound_call
 1. Make a request to the `/outbound-call` endpoint with the prompt you want to use:
 
 ```bash
-curl -X POST https://02f4-5-148-87-204.ngrok-free.app/outbound-call \
+curl -X POST https://9bda-5-148-87-204.ngrok-free.app/outbound-call \
 -H "Content-Type: application/json" \
 -d '{
-   "prompt": "You are Eric, an outbound car sales agent. You are calling to sell a new car to the customer. Be friendly and professional and answer all questions.",
-   "first_message": "Hello Thor, my name is Eric, I heard you were looking for a new car! What model and color are you looking for?",
+   "prompt": "You are Hogbert, an outbound job interviewer. You are calling to practice a job interview with the customer. Be friendly and professional and answer all questions.",
+   "first_message": "Hello Thor, my name is Hogbert, I heard you were looking for a new job! Shall we begin with you telling me a bit about yourself?",
    "number": "+447874943523"
    }'
 ```
 
-https://02f4-5-148-87-204.ngrok-free.app/outbound-call
+https://9bda-5-148-87-204.ngrok-free.app/outbound-call
 
 ## Troubleshooting
 
