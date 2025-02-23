@@ -33,6 +33,24 @@ const fastify = Fastify();
 fastify.register(fastifyFormBody);
 fastify.register(fastifyWs);
 
+// Add CORS headers
+fastify.addHook('onRequest', (request, reply, done) => {
+  const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
+  const origin = request.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    reply.header('Access-Control-Allow-Origin', origin);
+    reply.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    reply.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+  }
+
+  if (request.method === 'OPTIONS') {
+    reply.send();
+    return;
+  }
+  done();
+});
+
 const PORT = process.env.PORT || 8000;
 
 // Root route for health check
