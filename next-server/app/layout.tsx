@@ -17,11 +17,17 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
             <div className="flex flex-col flex-grow w-full items-center justify-center sm:px-4">
                 <nav
                     className={
-                        "sm:fixed w-full top-0 left-0 grid grid-cols-2 py-4 px-8 bg-background"
+                        "sm:fixed w-full top-0 left-0 grid grid-cols-3 py-4 px-8 bg-background"
                     }
                 >
                     <div className={"flex"}>
                       <Link href="/" className="text-xl font-bold text-primary hover:text-primary-dark">PrepHog</Link>
+                    </div>
+
+                    <div className="flex justify-center">
+                      <Link href="/open-roles" className="text-primary hover:text-primary-dark">
+                        View open roles
+                      </Link>
                     </div>
 
                     <div className={"flex gap-4 justify-end"}>
