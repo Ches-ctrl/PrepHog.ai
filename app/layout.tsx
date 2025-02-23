@@ -21,7 +21,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                     }
                 >
                     <div className={"flex"}>
-                      <Link href="/" className="text-xl font-bold text-primary">PrepHog</Link>
+                      <Link href="/" className="text-xl font-bold text-primary hover:text-primary-dark">PrepHog</Link>
                     </div>
 
                     <div className={"flex gap-4 justify-end"}>
@@ -33,7 +33,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                             aria-label="View source on GitHub"
                         >
                             <GithubLogo
-                                className={"w-5 h-5 hover:text-primary text-[#24292f]"}
+                                className={"w-5 h-5 text-primary hover:text-primary-dark text-[#24292f]"}
                             />
                         </Link>
                     </div>
