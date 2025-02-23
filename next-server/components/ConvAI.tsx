@@ -7,6 +7,17 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Conversation} from "@11labs/client";
 import {cn} from "@/lib/utils";
 import { FeedbackModal } from "./FeedbackModal";
+import { PostHog } from 'posthog-node'
+
+// Initialize PostHog client
+const phClient = new PostHog(
+    'phc_OzoEBK0CxcLxYpFlVNi4Bh78pao7J111Oh0pTNowkFW',
+    {
+        host: 'https://eu.i.posthog.com',
+        flushAt: 1, // Force immediate sending of events
+        flushInterval: 0 // Disable batching
+    }
+);
 
 async function requestMicrophonePermission() {
     try {
@@ -41,6 +52,13 @@ export function ConvAI() {
     const [error, setError] = useState<string | null>(null)
     const [isTestMode, setIsTestMode] = useState(false)
     const [conversationId, setConversationId] = useState<string | null>(null)
+
+    // Ensure events are flushed when unmounting
+    React.useEffect(() => {
+        return () => {
+            phClient.shutdown();
+        };
+    }, []);
 
     async function evaluateQA(question: string, answer: string) {
         console.log('Evaluating Q&A:', { question, answer });
@@ -84,6 +102,18 @@ export function ConvAI() {
                 console.log('Connected to conversation');
                 setIsConnected(true)
                 setIsSpeaking(true)
+
+                // Track conversation start
+                phClient.capture({
+                    distinctId: 'voice-user',
+                    event: '$ai_generation',
+                    properties: {
+                        $ai_provider: 'elevenlabs',
+                        $ai_model: 'convai',
+                        $ai_trace_id: Date.now().toString(),
+                        conversation_started: true
+                    }
+                });
             },
             onDisconnect: () => {
                 console.log('Disconnected from conversation');
@@ -91,6 +121,17 @@ export function ConvAI() {
                 setIsSpeaking(false)
                 setFeedback(null)
                 setConversationId(null)
+
+                // Track conversation end
+                phClient.capture({
+                    distinctId: 'voice-user',
+                    event: '$ai_generation',
+                    properties: {
+                        $ai_provider: 'elevenlabs',
+                        $ai_model: 'convai',
+                        conversation_ended: true
+                    }
+                });
             },
             onError: (error) => {
                 console.log('Conversation error:', error)
@@ -105,6 +146,20 @@ export function ConvAI() {
                 const messageContent = typeof msg.message === 'string' ? msg.message : msg.message.message;
                 const source = (msg.source || '').toLowerCase();
                 console.log('Processing message:', { content: messageContent, source, currentQuestion });
+
+                // Track each message with PostHog
+                phClient.capture({
+                    distinctId: 'voice-user',
+                    event: '$ai_generation',
+                    properties: {
+                        $ai_provider: 'elevenlabs',
+                        $ai_model: 'convai',
+                        $ai_input: source === 'user' ? messageContent : undefined,
+                        $ai_output_choices: source === 'assistant' || source === 'ai' ? [{ content: messageContent }] : undefined,
+                        message_source: source,
+                        conversation_id: conversationId
+                    }
+                });
 
                 // Handle system messages
                 if (source === 'system') {
