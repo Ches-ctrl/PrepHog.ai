@@ -20,6 +20,10 @@
 /next-server/node_modules/
 /next-server/out/
 
+# twilio
+/twilio/node_modules/
+/twilio/out/
+
 # production
 /build
 
