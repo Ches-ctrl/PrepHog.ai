@@ -3,7 +3,7 @@ import "./globals.css";
 import Link from "next/link";
 import {ElevenLabsLogo, GithubLogo} from "@/components/logos";
 import Script from 'next/script';
-import { PostHogProvider } from "@/components/analytics/posthog-provider";
+import { PostHogSnippet } from "@/components/analytics/posthog-snippet";
 
 export const metadata: Metadata = {
     title: "ConvAI",
@@ -13,7 +13,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     return (
         <html lang="en" className={"h-full w-full"}>
         <body className={`antialiased w-full h-full lex flex-col`}>
-            <PostHogProvider />
+            <PostHogSnippet />
             <div className="flex flex-col flex-grow w-full items-center justify-center sm:px-4">
                 <nav
                     className={
@@ -21,11 +21,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                     }
                 >
                     <div className={"flex"}>
-                        <Link href={"/"} prefetch={true}>
-                            <ElevenLabsLogo
-                                className={"h-[15px] w-auto hover:text-gray-500"}
-                            />
-                        </Link>
+                      <h1 className="text-xl font-bold">PrepHog</h1>
                     </div>
 
                     <div className={"flex gap-4 justify-end"}>
