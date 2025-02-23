@@ -4,8 +4,8 @@ import VideoEasterEgg from './components/VideoEasterEgg'
 
 export default function Home() {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-8">
-            <main className="max-w-2xl text-center">
+        <div className="min-h-screen flex flex-col p-8 pt-36">
+            <main className="max-w-2xl mx-auto text-center">
                 <Image
                     src="/hogbert-interviews.png"
                     alt="Hogbert - Your interview practice companion"
@@ -14,14 +14,17 @@ export default function Home() {
                     className="mx-auto mb-8 rounded-2xl"
                     priority
                 />
-                <div className="flex items-center justify-center gap-2 mb-6">
-                    <h1 className="text-4xl font-bold">Welcome to PrepHog</h1>
-                    <VideoEasterEgg />
+                <div className="mb-20">
+                  <div className="flex items-center justify-center gap-2 mb-3">
+                      <h1 className="text-4xl font-bold">Welcome to PrepHog</h1>
+                      <VideoEasterEgg />
+                  </div>
+                  <p className="text-xl mb-8 text-gray-600">
+                      Practice for your Posthog job interview delivered via hedgehog
+                  </p>
                 </div>
-                <p className="text-xl mb-8 text-gray-600">
-                    Practice for your job interview at PostHog with multi-modal AI
-                </p>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 pt-8">
+                    <p className="text-xl mb-1 text-gray-600">How would you like to practice your job interview?</p>
                     <Link
                         href="/chat"
                         className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg transition-colors"
