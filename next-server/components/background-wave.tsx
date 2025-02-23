@@ -9,7 +9,7 @@ export const BackgroundWave = () => {
       muted
       loop
       controls={false}
-      className="fixed grayscale object-cover bottom-0 z-[-1] hidden md:block pointer-events-none opacity-75 "
+      className="fixed object-cover bottom-0 z-[-1] hidden md:block pointer-events-none opacity-75 [filter:sepia(100%)_hue-rotate(340deg)_saturate(150%)]"
     />
   );
 };
