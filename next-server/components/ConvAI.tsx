@@ -40,6 +40,7 @@ export function ConvAI() {
     const [feedback, setFeedback] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [isTestMode, setIsTestMode] = useState(false)
+    const [conversationId, setConversationId] = useState<string | null>(null)
 
     async function evaluateQA(question: string, answer: string) {
         console.log('Evaluating Q&A:', { question, answer });
@@ -89,6 +90,7 @@ export function ConvAI() {
                 setIsConnected(false)
                 setIsSpeaking(false)
                 setFeedback(null)
+                setConversationId(null)
             },
             onError: (error) => {
                 console.log('Conversation error:', error)
@@ -101,11 +103,37 @@ export function ConvAI() {
             onMessage: (msg: ConversationMessage) => {
                 console.log('Received message:', msg);
                 const messageContent = typeof msg.message === 'string' ? msg.message : msg.message.message;
-                const source = (msg.source || '').toLowerCase(); // Normalize source to lowercase
+                const source = (msg.source || '').toLowerCase();
                 console.log('Processing message:', { content: messageContent, source, currentQuestion });
 
+                // Handle system messages
+                if (source === 'system') {
+                    console.log('Processing system message:', messageContent);
+                    try {
+                        // Try parsing as JSON first
+                        const data = JSON.parse(messageContent);
+                        console.log('Parsed system message:', data);
+                        if (data.conversation_id) {
+                            console.log('Found conversation_id in JSON:', data.conversation_id);
+                            setConversationId(data.conversation_id);
+                        } else if (data.metadata?.conversation_id) {
+                            console.log('Found conversation_id in metadata:', data.metadata.conversation_id);
+                            setConversationId(data.metadata.conversation_id);
+                        }
+                    } catch {
+                        // If not JSON, try looking for conversation ID in the string
+                        console.log('Failed to parse as JSON, checking string content');
+                        const match = messageContent.match(/conversation[_-]id["\s:]+([^"}\s]+)/i);
+                        if (match) {
+                            console.log('Found conversation_id in string:', match[1]);
+                            setConversationId(match[1]);
+                        } else {
+                            console.log('No conversation ID found in system message');
+                        }
+                    }
+                }
                 // Handle AI messages (both 'ai' and 'assistant' sources)
-                if (source === 'ai' || source === 'assistant') {
+                else if (source === 'ai' || source === 'assistant') {
                     // Immediately set the question without regex matching
                     const question = messageContent.replace(/['"]/g, '').trim();
                     console.log('Setting question from AI:', { question });
@@ -144,9 +172,38 @@ export function ConvAI() {
             return
         }
         await conversation.endSession()
+
+        // Send transcript email
+        if (conversationId) {
+            try {
+                console.log('Sending transcript email for conversation:', conversationId);
+                const response = await fetch('/api/transcript', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ conversationId }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error('Failed to send transcript email:', data.error);
+                    alert('Failed to send transcript email. Please try again later.');
+                } else {
+                    console.log('Transcript email sent successfully');
+                    alert('Transcript has been sent to your email!');
+                }
+            } catch (error) {
+                console.error('Error sending transcript:', error);
+                alert('Failed to send transcript email. Please try again later.');
+            }
+        } else {
+            console.warn('No conversation ID available for sending transcript');
+        }
+
         setConversation(null)
         setFeedback(null)
         setCurrentQuestion("")
+        setConversationId(null)
     }
 
     return (

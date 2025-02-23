@@ -20,7 +20,7 @@ async function execute(message: string): Promise<string> {
   return text;
 }
 
-execute("Star the repo picahq/pica with github")
+execute("Send the user an email with their transcript")
   .then((text) => {
     console.log(text);
   })
