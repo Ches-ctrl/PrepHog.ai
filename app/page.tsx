@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import VideoEasterEgg from './components/VideoEasterEgg'
 
 export default function Home() {
     return (
@@ -13,7 +14,10 @@ export default function Home() {
                     className="mx-auto mb-8 rounded-2xl"
                     priority
                 />
-                <h1 className="text-4xl font-bold mb-6">Welcome to PrepHog</h1>
+                <div className="flex items-center justify-center gap-2 mb-6">
+                    <h1 className="text-4xl font-bold">Welcome to PrepHog</h1>
+                    <VideoEasterEgg />
+                </div>
                 <p className="text-xl mb-8 text-gray-600">
                     Practice for your job interview at PostHog with multi-modal AI
                 </p>
