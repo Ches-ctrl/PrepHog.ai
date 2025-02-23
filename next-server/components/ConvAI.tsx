@@ -7,17 +7,15 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Conversation} from "@11labs/client";
 import {cn} from "@/lib/utils";
 import { FeedbackModal } from "./FeedbackModal";
-import { PostHog } from 'posthog-node'
+import posthog from 'posthog-js'
+import Image from 'next/image'
 
 // Initialize PostHog client
-const phClient = new PostHog(
-    'phc_OzoEBK0CxcLxYpFlVNi4Bh78pao7J111Oh0pTNowkFW',
-    {
-        host: 'https://eu.i.posthog.com',
-        flushAt: 1, // Force immediate sending of events
-        flushInterval: 0 // Disable batching
-    }
-);
+if (typeof window !== 'undefined') {
+    posthog.init('phc_OzoEBK0CxcLxYpFlVNi4Bh78pao7J111Oh0pTNowkFW', {
+        api_host: 'https://eu.i.posthog.com'
+    })
+}
 
 async function requestMicrophonePermission() {
     try {
@@ -52,13 +50,6 @@ export function ConvAI() {
     const [error, setError] = useState<string | null>(null)
     const [isTestMode, setIsTestMode] = useState(false)
     const [conversationId, setConversationId] = useState<string | null>(null)
-
-    // Ensure events are flushed when unmounting
-    React.useEffect(() => {
-        return () => {
-            phClient.shutdown();
-        };
-    }, []);
 
     async function evaluateQA(question: string, answer: string) {
         console.log('Evaluating Q&A:', { question, answer });
@@ -104,15 +95,11 @@ export function ConvAI() {
                 setIsSpeaking(true)
 
                 // Track conversation start
-                phClient.capture({
-                    distinctId: 'voice-user',
-                    event: '$ai_generation',
-                    properties: {
-                        $ai_provider: 'elevenlabs',
-                        $ai_model: 'convai',
-                        $ai_trace_id: Date.now().toString(),
-                        conversation_started: true
-                    }
+                posthog.capture('$ai_generation', {
+                    $ai_provider: 'elevenlabs',
+                    $ai_model: 'convai',
+                    $ai_trace_id: Date.now().toString(),
+                    conversation_started: true
                 });
             },
             onDisconnect: () => {
@@ -123,14 +110,10 @@ export function ConvAI() {
                 setConversationId(null)
 
                 // Track conversation end
-                phClient.capture({
-                    distinctId: 'voice-user',
-                    event: '$ai_generation',
-                    properties: {
-                        $ai_provider: 'elevenlabs',
-                        $ai_model: 'convai',
-                        conversation_ended: true
-                    }
+                posthog.capture('$ai_generation', {
+                    $ai_provider: 'elevenlabs',
+                    $ai_model: 'convai',
+                    conversation_ended: true
                 });
             },
             onError: (error) => {
@@ -148,17 +131,13 @@ export function ConvAI() {
                 console.log('Processing message:', { content: messageContent, source, currentQuestion });
 
                 // Track each message with PostHog
-                phClient.capture({
-                    distinctId: 'voice-user',
-                    event: '$ai_generation',
-                    properties: {
-                        $ai_provider: 'elevenlabs',
-                        $ai_model: 'convai',
-                        $ai_input: source === 'user' ? messageContent : undefined,
-                        $ai_output_choices: source === 'assistant' || source === 'ai' ? [{ content: messageContent }] : undefined,
-                        message_source: source,
-                        conversation_id: conversationId
-                    }
+                posthog.capture('$ai_generation', {
+                    $ai_provider: 'elevenlabs',
+                    $ai_model: 'convai',
+                    $ai_input: source === 'user' ? messageContent : undefined,
+                    $ai_output_choices: source === 'assistant' || source === 'ai' ? [{ content: messageContent }] : undefined,
+                    message_source: source,
+                    conversation_id: conversationId
                 });
 
                 // Handle system messages
@@ -263,7 +242,7 @@ export function ConvAI() {
 
     return (
         <div className={"flex justify-center items-center gap-x-4"}>
-            <Card className={'rounded-3xl'}>
+            <Card className={'rounded-3xl min-w-[300px]'}>
                 <CardContent>
                     <CardHeader>
                         <CardTitle className={'text-center'}>
@@ -275,10 +254,16 @@ export function ConvAI() {
                         </CardTitle>
                     </CardHeader>
                     <div className={'flex flex-col gap-y-4 text-center'}>
-                        <div className={cn('orb my-16 mx-12',
-                            isSpeaking ? 'animate-orb' : (conversation && 'animate-orb-slow'),
-                            isConnected ? 'orb-active' : 'orb-inactive')}
-                        ></div>
+                        <div className={cn('relative w-48 h-48 mx-auto my-8',
+                            isSpeaking ? 'animate-[bounce_2s_ease-in-out_infinite]' : (conversation && 'animate-pulse'))}>
+                            <Image
+                                src="/hogbert-engineers.png"
+                                alt="Hedgehog assistant"
+                                fill
+                                className="object-contain"
+                                priority
+                            />
+                        </div>
 
                         <Button
                             variant={'outline'}
